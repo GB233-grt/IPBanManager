@@ -1,0 +1,341 @@
+<UserControl x:Class="IPBanManager.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FontFamily="{StaticResource AppFont}" FontSize="13"
+             TextOptions.TextFormattingMode="Display">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="28,22,28,32">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="首页" Style="{StaticResource PageTitleText}" />
+                    <TextBlock Text="本地 HOSTS 封禁 · 当前状态一览" Style="{StaticResource PageSubtitleText}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{StaticResource SecondaryButtonStyle}" Padding="13,8" Margin="0,0,10,0"
+                            Click="RefreshDns_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE72C;" FontFamily="{StaticResource IconFont}" FontSize="12"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text="刷新 DNS" Margin="6,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource PrimaryButtonStyle}" Padding="15,9" Click="AddRule_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE710;" FontFamily="{StaticResource IconFont}" FontSize="12"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text="添加封禁规则" Margin="6,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <UniformGrid Columns="4" Margin="0,22,0,0">
+                <Border Style="{StaticResource CardStyle}" Padding="18" Margin="0,0,12,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="规则总数" Style="{StaticResource MutedText}" />
+                        <Border Grid.Column="1" Width="35" Height="35" CornerRadius="10"
+                                Background="{DynamicResource AccentSoftBrush}">
+                            <TextBlock Text="&#xE8FD;" FontFamily="{StaticResource IconFont}" FontSize="15"
+                                       Foreground="{DynamicResource AccentBrush}"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Grid.Row="1" Text="{Binding RuleCount}" Style="{StaticResource StatValueText}"
+                                   Margin="0,10,0,0" />
+                        <TextBlock Grid.Row="2" Text="全部域名的封禁记录" Style="{StaticResource MutedText}" Margin="0,3,0,0" />
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}" Padding="18" Margin="0,0,12,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="正在生效" Style="{StaticResource MutedText}" />
+                        <Border Grid.Column="1" Width="35" Height="35" CornerRadius="10"
+                                Background="{DynamicResource SuccessSoftBrush}">
+                            <TextBlock Text="&#xE83D;" FontFamily="{StaticResource IconFont}" FontSize="15"
+                                       Foreground="{DynamicResource SuccessBrush}"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Grid.Row="1" Text="{Binding EnabledRuleCount}" Style="{StaticResource StatValueText}"
+                                   Margin="0,10,0,0" />
+                        <TextBlock Grid.Row="2" Text="已写入 HOSTS 的域名" Style="{StaticResource MutedText}" Margin="0,3,0,0" />
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}" Padding="18" Margin="0,0,12,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="已暂停 / 禁用" Style="{StaticResource MutedText}" />
+                        <Border Grid.Column="1" Width="35" Height="35" CornerRadius="10"
+                                Background="{DynamicResource WarningSoftBrush}">
+                            <TextBlock Text="&#xE7E8;" FontFamily="{StaticResource IconFont}" FontSize="15"
+                                       Foreground="{DynamicResource WarningBrush}"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Grid.Row="1" Text="{Binding DisabledRuleCount}" Style="{StaticResource StatValueText}"
+                                   Margin="0,10,0,0" />
+                        <TextBlock Grid.Row="2" Text="不写入 HOSTS 的规则" Style="{StaticResource MutedText}" Margin="0,3,0,0" />
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}" Padding="18">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="规则分组" Style="{StaticResource MutedText}" />
+                        <Border Grid.Column="1" Width="35" Height="35" CornerRadius="10"
+                                Background="{DynamicResource IconSoftBrush}">
+                            <TextBlock Text="&#xE716;" FontFamily="{StaticResource IconFont}" FontSize="15"
+                                       Foreground="{DynamicResource AccentBrush}"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Grid.Row="1" Text="{Binding GroupCount}" Style="{StaticResource StatValueText}"
+                                   Margin="0,10,0,0" />
+                        <TextBlock Grid.Row="2" Text="{Binding PausedGroupCount, StringFormat='其中 {0} 个分组已暂停'}"
+                                   Style="{StaticResource MutedText}" Margin="0,3,0,0" />
+                    </Grid>
+                </Border>
+            </UniformGrid>
+
+            <Grid Margin="0,18,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.65*" />
+                    <ColumnDefinition Width="18" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <Border Style="{StaticResource CardStyle}" Padding="20">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="最近操作" Style="{StaticResource SectionTitleText}" />
+                                    <Border Background="{DynamicResource AccentSoftBrush}" CornerRadius="8"
+                                            Padding="8,2" Margin="9,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding RecentOperations.Count, StringFormat='{}{0} 条'}"
+                                                   FontSize="10.5" Foreground="{DynamicResource AccentBrush}" />
+                                    </Border>
+                                </StackPanel>
+                                <Button Content="查看全部" HorizontalAlignment="Right"
+                                        Style="{StaticResource GhostButtonStyle}" Padding="8,5"
+                                        Click="ViewLogs_Click" />
+                            </Grid>
+
+                            <ItemsControl Grid.Row="1" ItemsSource="{Binding RecentOperations}" Margin="0,6,0,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,7">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Border Width="34" Height="34" CornerRadius="10" VerticalAlignment="Top"
+                                                    Background="{Binding Success, Converter={StaticResource OperationSoftBrush}}">
+                                                <TextBlock Text="{Binding Kind, Converter={StaticResource OperationGlyph}}"
+                                                           FontFamily="{StaticResource IconFont}" FontSize="13"
+                                                           Foreground="{Binding Success, Converter={StaticResource OperationBrush}}"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                            <StackPanel Grid.Column="1" Margin="11,1,12,0">
+                                                <TextBlock Text="{Binding Title}" FontSize="12.5" FontWeight="SemiBold"
+                                                           Foreground="{DynamicResource TextBrush}" />
+                                                <TextBlock Text="{Binding Detail}" FontSize="11.5"
+                                                           Foreground="{DynamicResource SubTextBrush}"
+                                                           TextTrimming="CharacterEllipsis" Margin="0,3,0,0" />
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="2" Text="{Binding Time, Converter={StaticResource RelativeTime}}"
+                                                       FontSize="11" Foreground="{DynamicResource MutedTextBrush}"
+                                                       VerticalAlignment="Top" Margin="0,2,0,0" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Border Grid.Row="1" Style="{StaticResource InnerCardStyle}" Margin="0,12,0,0"
+                                    Visibility="{Binding HasOperations, Converter={StaticResource BoolToVisibility}, ConverterParameter=invert}">
+                                <StackPanel HorizontalAlignment="Center" Margin="0,18">
+                                    <TextBlock Text="&#xE81C;" FontFamily="{StaticResource IconFont}" FontSize="22"
+                                               Foreground="{DynamicResource MutedTextBrush}" HorizontalAlignment="Center" />
+                                    <TextBlock Text="还没有操作记录" Foreground="{DynamicResource SubTextBrush}"
+                                               Margin="0,8,0,0" HorizontalAlignment="Center" />
+                                    <TextBlock Text="添加第一条封禁规则后，这里会记录每一步操作。"
+                                               Style="{StaticResource MutedText}" Margin="0,4,0,0"
+                                               HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{StaticResource CardStyle}" Padding="18" Margin="0,16,0,0">
+                        <StackPanel>
+                            <TextBlock Text="快捷操作" Style="{StaticResource SectionTitleText}" Margin="2,0,0,4" />
+                            <UniformGrid Columns="2" Margin="0,10,0,0">
+                                <Button Style="{StaticResource SecondaryButtonStyle}" Padding="14,10" Margin="0,0,6,6"
+                                        HorizontalContentAlignment="Left" Click="AddRule_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE710;" FontFamily="{StaticResource IconFont}" FontSize="13"
+                                                   Foreground="{DynamicResource AccentBrush}" VerticalAlignment="Center" />
+                                        <TextBlock Text="添加规则" Margin="8,0,0,0" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Style="{StaticResource SecondaryButtonStyle}" Padding="14,10" Margin="6,0,0,6"
+                                        HorizontalContentAlignment="Left" Click="ApplyHosts_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE74E;" FontFamily="{StaticResource IconFont}" FontSize="13"
+                                                   Foreground="{DynamicResource AccentBrush}" VerticalAlignment="Center" />
+                                        <TextBlock Text="立即应用" Margin="8,0,0,0" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Style="{StaticResource SecondaryButtonStyle}" Padding="14,10" Margin="0,6,6,0"
+                                        HorizontalContentAlignment="Left" Click="EnableAll_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE73E;" FontFamily="{StaticResource IconFont}" FontSize="13"
+                                                   Foreground="{DynamicResource SuccessBrush}" VerticalAlignment="Center" />
+                                        <TextBlock Text="全部启用" Margin="8,0,0,0" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Style="{StaticResource SecondaryButtonStyle}" Padding="14,10" Margin="6,6,0,0"
+                                        HorizontalContentAlignment="Left" Click="DisableAll_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE7E8;" FontFamily="{StaticResource IconFont}" FontSize="13"
+                                                   Foreground="{DynamicResource WarningBrush}" VerticalAlignment="Center" />
+                                        <TextBlock Text="全部禁用" Margin="8,0,0,0" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                            </UniformGrid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <Border Style="{StaticResource CardStyle}" Padding="20">
+                        <StackPanel>
+                            <TextBlock Text="运行状态" Style="{StaticResource SectionTitleText}" />
+                            <Grid Margin="0,15,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                    <Border Width="8" Height="8" CornerRadius="4" VerticalAlignment="Center">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="{DynamicResource SuccessBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsAdmin}" Value="False">
+                                                        <Setter Property="Background" Value="{DynamicResource WarningBrush}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                    </Border>
+                                    <TextBlock Text="权限" FontSize="12" Foreground="{DynamicResource MutedTextBrush}"
+                                               Margin="8,0,0,0" VerticalAlignment="Center" />
+                                </StackPanel>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding AdminStatusText}"
+                                           FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Right"
+                                           Foreground="{DynamicResource TextBrush}" />
+
+                                <TextBlock Grid.Row="1" Text="最近应用" FontSize="12" Margin="16,13,0,0"
+                                           Foreground="{DynamicResource MutedTextBrush}" />
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding LastApplyText}" FontSize="12"
+                                           Margin="0,13,0,0" HorizontalAlignment="Right"
+                                           Foreground="{DynamicResource TextBrush}" />
+
+                                <TextBlock Grid.Row="2" Text="DNS 缓存" FontSize="12" Margin="16,11,0,0"
+                                           Foreground="{DynamicResource MutedTextBrush}" />
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding LastDnsText}" FontSize="12"
+                                           Margin="0,11,0,0" HorizontalAlignment="Right"
+                                           Foreground="{DynamicResource TextBrush}" />
+
+                                <TextBlock Grid.Row="3" Text="HOSTS 备份" FontSize="12" Margin="16,11,0,0"
+                                           Foreground="{DynamicResource MutedTextBrush}" />
+                                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding LastBackupText}" FontSize="12"
+                                           Margin="0,11,0,0" HorizontalAlignment="Right"
+                                           Foreground="{DynamicResource TextBrush}" />
+                            </Grid>
+
+                            <Border Style="{StaticResource InnerCardStyle}" Margin="0,15,0,0" Padding="12">
+                                <StackPanel>
+                                    <TextBlock Text="HOSTS 文件" FontSize="10.5" Foreground="{DynamicResource MutedTextBrush}" />
+                                    <TextBlock Text="{Binding HostsPathDisplay}" FontSize="11" Margin="0,5,0,0"
+                                               Foreground="{DynamicResource SubTextBrush}" TextTrimming="CharacterEllipsis"
+                                               ToolTip="{Binding HostsPathDisplay}" />
+                                </StackPanel>
+                            </Border>
+
+                            <UniformGrid Columns="2" Margin="0,13,0,0">
+                                <Button Content="打开目录" Style="{StaticResource GhostButtonStyle}"
+                                        Padding="8,7" Margin="0,0,4,0" Click="OpenHostsFolder_Click" />
+                                <Button Content="立即备份" Style="{StaticResource GhostButtonStyle}"
+                                        Padding="8,7" Margin="4,0,0,0" Click="BackupNow_Click" />
+                            </UniformGrid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource CardStyle}" Padding="18" Margin="0,16,0,0"
+                            Background="{DynamicResource AccentSoftBrush}" BorderBrush="{DynamicResource AccentBrush}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE946;" FontFamily="{StaticResource IconFont}" FontSize="13"
+                                           Foreground="{DynamicResource AccentBrush}" VerticalAlignment="Center" />
+                                <TextBlock Text="小提示" FontSize="12.5" FontWeight="SemiBold" Margin="7,0,0,0"
+                                           Foreground="{DynamicResource AccentBrush}" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <TextBlock Text="HOSTS 屏蔽工作在域名解析层，不会修改防火墙或网卡。修改后浏览器可能需要重新打开标签页。"
+                                       Style="{StaticResource BodyText}" Margin="0,8,0,0" FontSize="11.5" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

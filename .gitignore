@@ -1,0 +1,10 @@
+bin/
+obj/
+dist/
+build.log
+*.user
+*.suo
+.vs/
+_previewdata/
+_testdata/
+docs/assets/_current.png

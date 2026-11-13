@@ -1,0 +1,44 @@
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>IPBanManager.CoreTests</RootNamespace>
+    <AssemblyName>CoreTests</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <FrameworkPathOverride>C:\Windows\Microsoft.NET\Framework64\v4.0.30319</FrameworkPathOverride>
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="..\..\src\IPBanManager\Models\BanRule.cs" />
+    <Compile Include="..\..\src\IPBanManager\Models\BanGroup.cs" />
+    <Compile Include="..\..\src\IPBanManager\Models\OperationRecord.cs" />
+    <Compile Include="..\..\src\IPBanManager\Models\AppData.cs" />
+    <Compile Include="..\..\src\IPBanManager\Models\AppSettings.cs" />
+    <Compile Include="..\..\src\IPBanManager\Models\ThemeSettings.cs" />
+    <Compile Include="..\..\src\IPBanManager\Models\RuleEditResult.cs" />
+    <Compile Include="..\..\src\IPBanManager\Services\StoragePaths.cs" />
+    <Compile Include="..\..\src\IPBanManager\Services\JsonHelper.cs" />
+    <Compile Include="..\..\src\IPBanManager\Services\LogService.cs" />
+    <Compile Include="..\..\src\IPBanManager\Services\DomainUtil.cs" />
+    <Compile Include="..\..\src\IPBanManager\Services\RuleService.cs" />
+    <Compile Include="..\..\src\IPBanManager\Services\DataService.cs" />
+    <Compile Include="..\..\src\IPBanManager\Services\BackupManager.cs" />
+    <Compile Include="..\..\src\IPBanManager\Services\HostsManager.cs" />
+    <Compile Include="..\..\src\IPBanManager\Services\DnsService.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
+

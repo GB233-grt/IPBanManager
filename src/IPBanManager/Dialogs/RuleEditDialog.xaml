@@ -1,0 +1,127 @@
+<Window x:Class="IPBanManager.RuleEditDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="规则" Width="650" SizeToContent="Height" MaxHeight="820" ResizeMode="NoResize"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        FontFamily="{StaticResource AppFont}" FontSize="13"
+        TextOptions.TextFormattingMode="Display" UseLayoutRounding="True">
+    <Grid Margin="26">
+        <Border Style="{StaticResource DialogCardStyle}" Padding="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Background="Transparent" MouseLeftButtonDown="Header_MouseLeftButtonDown">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="23,20,0,0">
+                        <Border Width="32" Height="32" CornerRadius="9" Background="{DynamicResource AccentSoftBrush}">
+                            <TextBlock Text="&#xE710;" FontFamily="{StaticResource IconFont}" FontSize="14"
+                                       Foreground="{DynamicResource AccentBrush}"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock x:Name="TitleText" Text="添加封禁规则" FontSize="17" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}" Margin="11,0,0,0"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="&#xE8BB;" Style="{StaticResource IconButtonStyle}"
+                            Click="Cancel_Click" Margin="0,14,14,0" Width="30" Height="30" />
+                </Grid>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" MaxHeight="660">
+                    <StackPanel Margin="23,20,23,6">
+                        <TextBlock x:Name="DomainLabel" Text="域名或网址" Style="{StaticResource LabelText}" />
+                        <TextBox x:Name="DomainBox" Style="{StaticResource ModernTextBoxStyle}"
+                                 Height="82" AcceptsReturn="True" TextWrapping="Wrap"
+                                 VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto"
+                                 TextChanged="DomainBox_TextChanged" />
+                        <TextBlock x:Name="DomainHint" Text="支持直接粘贴网址，例如 https://www.bilibili.com/video/BV1；每行一个域名。"
+                                   Style="{StaticResource MutedText}" Margin="2,6,0,0" TextWrapping="Wrap" />
+
+                        <CheckBox x:Name="ExpandCheck" Style="{StaticResource ModernCheckBoxStyle}"
+                                  Content="同时封禁常见子域（www / m / api 等）" Margin="1,14,0,0"
+                                  Checked="ExpandCheck_Changed" Unchecked="ExpandCheck_Changed" />
+                        <TextBlock x:Name="ExpandHint" Text="输入 bilibili.com 时会一并添加 www.bilibili.com、m.bilibili.com、api.bilibili.com。"
+                                   Style="{StaticResource MutedText}" Margin="27,5,0,0" TextWrapping="Wrap" />
+
+                        <Grid Margin="0,18,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="14" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="写入方式" Style="{StaticResource LabelText}" />
+                                <ComboBox x:Name="IpModeCombo" Style="{StaticResource ModernComboBoxStyle}"
+                                          SelectionChanged="IpMode_Changed">
+                                    <ComboBoxItem Content="自动：同时写入 0.0.0.0 和 127.0.0.1" Tag="auto" />
+                                    <ComboBoxItem Content="自定义目标 IP" Tag="custom" />
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="所属分组" Style="{StaticResource LabelText}" />
+                                <ComboBox x:Name="GroupCombo" Style="{StaticResource ModernComboBoxStyle}"
+                                          SelectedValuePath="Id">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Border Width="9" Height="9" CornerRadius="5" VerticalAlignment="Center"
+                                                        Background="{Binding Color, Converter={StaticResource HexBrush}}" />
+                                                <TextBlock Text="{Binding Name}" Margin="7,0,0,0" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel x:Name="CustomIpPanel" Margin="0,13,0,0" Visibility="Collapsed">
+                            <TextBlock Text="自定义 IP" Style="{StaticResource LabelText}" />
+                            <TextBox x:Name="CustomIpBox" Style="{StaticResource ModernTextBoxStyle}"
+                                     Text="127.0.0.1" TextChanged="CustomIpBox_TextChanged" />
+                            <TextBlock Text="例如 0.0.0.0（彻底屏蔽）或 127.0.0.1（重定向到本机）。"
+                                       Style="{StaticResource MutedText}" Margin="2,5,0,0" />
+                        </StackPanel>
+
+                        <TextBlock Text="备注" Style="{StaticResource LabelText}" Margin="0,16,0,7" />
+                        <TextBox x:Name="RemarkBox" Style="{StaticResource ModernTextBoxStyle}"
+                                 MaxLength="120" TextChanged="RemarkBox_TextChanged" />
+                        <TextBlock Text="备注会作为注释写入 HOSTS，例如“# 封禁：哔哩哔哩”。"
+                                   Style="{StaticResource MutedText}" Margin="2,5,0,0" />
+
+                        <CheckBox x:Name="EnabledCheck" Style="{StaticResource ModernCheckBoxStyle}"
+                                  Content="创建后立即启用" IsChecked="True" Margin="1,16,0,0" />
+
+                        <Border Style="{StaticResource InnerCardStyle}" Margin="0,18,0,0" Padding="14">
+                            <StackPanel>
+                                <TextBlock Text="写入预览" FontSize="11.5" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource SubTextBrush}" />
+                                <TextBlock x:Name="PreviewText" FontFamily="Consolas" FontSize="11.5"
+                                           Foreground="{DynamicResource TextBrush}" Margin="0,8,0,0"
+                                           TextWrapping="Wrap" LineHeight="19" />
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock x:Name="ErrorText" Text="" Foreground="{DynamicResource DangerBrush}"
+                                   FontSize="11.5" Margin="2,12,0,0" TextWrapping="Wrap"
+                                   Visibility="Collapsed" />
+                    </StackPanel>
+                </ScrollViewer>
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right"
+                            Margin="22,14,22,20">
+                    <Button Content="取消" Style="{StaticResource SecondaryButtonStyle}" MinWidth="88"
+                            Margin="0,0,10,0" Click="Cancel_Click" />
+                    <Button Content="保存并应用" Style="{StaticResource PrimaryButtonStyle}" MinWidth="112"
+                            Click="Save_Click" IsDefault="True" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
