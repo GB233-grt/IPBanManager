@@ -83,6 +83,9 @@ Copy-Item $sourceExe (Join-Path $distDir $exeName) -Force
 $manual = Join-Path $root "docs\用户手册.md"
 if (Test-Path $manual) { Copy-Item $manual (Join-Path $distDir "用户手册.md") -Force }
 
+$license = Join-Path $root "LICENSE"
+if (Test-Path $license) { Copy-Item $license (Join-Path $distDir "LICENSE") -Force }
+
 $editionTitle = if ($Preview) { "净域 - 界面预览版 v1.0.0" } else { "净域 - 本地 HOSTS 封禁工具 v1.0.0" }
 $quickSpec = if ($Preview) {
 @"
@@ -159,6 +162,7 @@ $versionInfo = @"
 构建配置：$Configuration
 构建类型：$(if ($Preview) { '界面预览版（HOSTS 指向临时目录，不写系统文件）' } else { '正式版（requireAdministrator）' })
 目标框架：.NET Framework 4.8 / x64
+许可证：MIT License
 主程序：$exeName
 SHA256：$hash
 "@

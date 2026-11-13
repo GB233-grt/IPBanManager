@@ -242,9 +242,10 @@ MSBuild ...\IPBanManager.csproj /nologo /v:m /p:Configuration=Release
 | 复核项 | 结果 |
 | --- | --- |
 | `test.ps1` / `build.ps1` 内核心测试 | 12/12 通过，失败 0；完整 `build.ps1` 退出码 0 |
-| 正式版 exe SHA256 | `F0776E04B76C79C42831E3437CE68430D1F5E499D26DDDE4A20C128AF5D9D886` |
-| `dist\净域-v1.0.0-win-x64.zip` 内 exe SHA256 | 与 dist 目录 exe 完全一致（`F0776E04…`，P1-1 已关闭） |
-| zip 内 `版本信息.txt` 记录 SHA256 | 与上述一致，构建时间 2026-11-13 14:03:10 |
+| 正式版 exe SHA256 | `816DBACAF59E479F6333CF3A64D4A6066D6CE5E7D849A07057FD85032C7AAA84` |
+| `dist\净域-v1.0.0-win-x64.zip` 内 exe SHA256 | 与 dist 目录 exe 完全一致（`816DBACA…`，P1-1 已关闭） |
+| zip 内 `版本信息.txt` 记录 SHA256 | 与上述一致，构建时间 2026-11-13 14:31:14 |
+| 发布包许可证 | 正式版与预览版 zip 均包含 `LICENSE`（MIT License） |
 | zip 内 `用户手册.md` | 21,004 B，与 `docs\用户手册.md` 一致（旧版 19,805 B 已消除） |
 | 正式版 RT_MANIFEST | 直接提取 PE 资源确认 `requireAdministrator` |
 | 预览版 RT_MANIFEST | `asInvoker`；`dist\净域-界面预览版` 与 zip 已同步生成 |
